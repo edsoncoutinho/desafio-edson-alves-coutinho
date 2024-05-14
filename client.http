@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:3333
+@authToken = {{authenticate.response.body.token}}
+
+# @name create_account
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "johndoe@example.com",
+  "password": "123456"
+}
+###
+
+# @name authenticate
+POST {{baseUrl}}/sessions
+Content-Type: application/json
+
+{
+  "email": "johndoe@example.com",
+  "password": "123456"
+}
+###
+
+# @name consumer_leagues
+GET {{baseUrl}}/consumer/leagues
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name consumer_teams
+GET {{baseUrl}}/consumer/teams
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name consumer_players
+GET {{baseUrl}}/consumer/players
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name feed_spreadsheets
+GET {{baseUrl}}/feed
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###

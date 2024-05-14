@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Player {
+  id           String    @id @default(uuid())
+  playerId     Int       @unique @map("player_id")
+  name         String
+  firstName    String    @map("first_name")
+  lastName     String    @map("last_name")
+  age          Int
+  birthDate    DateTime  @map("birth_date")
+  birthPlace   String?   @map("birth_place")
+  birthCountry String    @map("birth_country")
+  nationality  String
+  height       Int?
+  weight       Int?
+  injured      Boolean
+  photo        String
+  goals        Int
+  assists      Int
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
+  team         Team?     @relation(fields: [teamId], references: [id])
+  teamId       String?   @map("team_id")
+  league       League?   @relation(fields: [leagueId], references: [id])
+  leagueId     String?   @map("league_id")
+
+  @@map("players")
+}
+
+model Team {
+  id        String    @id @default(uuid())
+  teamId    Int       @unique @map("team_id")
+  name      String
+  logo      String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  players Player[]
+
+  @@map("teams")
+}
+
+model League {
+  id        String    @id @default(uuid())
+  leagueId  Int       @unique @map("league_id")
+  name      String
+  country   String
+  logo      String
+  flag      String?
+  season    Int
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  players Player[]
+
+  @@map("leagues")
+}
